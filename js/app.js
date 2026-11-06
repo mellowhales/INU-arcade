@@ -6063,6 +6063,7 @@
 
 
   window.App = {
-    updateInGameTurn
+    updateInGameTurn,
+    exitGameToRoom: _exitGameToRoom
   };
 })();

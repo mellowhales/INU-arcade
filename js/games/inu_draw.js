@@ -355,21 +355,11 @@ const InuDrawGame = (() => {
               <!-- 채점 결과 동적 주입 -->
             </div>
 
-            <div class="modal-footer inu-draw-result-footer">
-              ${_players.length > 1 ? `
-                ${_isHost ? `
-                  <button type="button" class="btn btn-gold" id="btn-draw-next-stage">
-                    <i class="fa-solid fa-dice"></i> 새로운 횃불이 도전 (다음 판)
-                  </button>
-                ` : `
-                  <div style="font-size:0.88rem; font-weight:800; color:var(--t2); display:flex; align-items:center; gap:6px;">
-                    <i class="fa-solid fa-hourglass-half" style="color:#FCAF15;"></i> 방장이 다음 판을 시작하기를 기다리는 중...
-                  </div>
-                `}
-              ` : `
-                <button type="button" class="btn btn-outline" id="btn-draw-retry">다시 그리기</button>
-                <button type="button" class="btn btn-gold" id="btn-draw-next-stage">새로운 횃불이 도전</button>
-              `}
+            <div class="modal-footer inu-draw-result-footer" style="justify-content: center; padding: 16px 24px; border-top: 1px solid var(--border);">
+              <button type="button" class="btn btn-primary" id="btn-draw-back-to-room" style="min-width: 220px; font-weight: 800; font-size: 1.05rem; padding: 12px 28px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; border-radius: 10px;">
+                <i class="fa-solid fa-door-open"></i>
+                <span>방으로 돌아가기</span>
+              </button>
             </div>
           </div>
         </div>
@@ -984,6 +974,29 @@ const InuDrawGame = (() => {
   }
 
   /**
+   * 플레이어 제출 정보 검색 헬퍼 (ID 및 닉네임 유연 매칭)
+   */
+  function _findPlayerSub(p) {
+    if (!p) return null;
+    const pId = String(p.id !== undefined && p.id !== null ? p.id : '');
+    const pName = String(p.name !== undefined && p.name !== null ? p.name : '');
+
+    // 1. ID 직접 매칭
+    if (pId && _submissions[pId]) return _submissions[pId];
+    // 2. 닉네임 직접 매칭
+    if (pName && _submissions[pName]) return _submissions[pName];
+    // 3. 값 순회 매칭
+    for (const key of Object.keys(_submissions)) {
+      const sub = _submissions[key];
+      if (sub) {
+        if (pId && String(sub.id) === pId) return sub;
+        if (pName && String(sub.name) === pName) return sub;
+      }
+    }
+    return null;
+  }
+
+  /**
    * 10. 채점 결과 제출 처리 (멀티플레이 동시 채점 동기화)
    */
   function _submitAndScore(isTimeOut = false) {
@@ -996,10 +1009,11 @@ const InuDrawGame = (() => {
     const timeUsed = _elapsedSec || (isTimeOut ? 30.0 : 1.0);
     const dataUrl = _drawCanvas ? _drawCanvas.toDataURL('image/png') : '';
 
-    // 내 결과 기록
-    _submissions[_myId] = {
+    // 내 결과 기록 (ID 및 닉네임 둘 다 등록하여 누락 방지)
+    const mySub = {
       id: _myId,
       name: _myName,
+      isHost: _isHost,
       score: result.score,
       matchRate: result.matchRate,
       meanDist: result.meanDist,
@@ -1008,6 +1022,9 @@ const InuDrawGame = (() => {
       penaltyReason: result.penaltyReason,
       resultObj: result
     };
+
+    _submissions[_myId] = mySub;
+    if (_myName) _submissions[_myName] = mySub;
 
     // 효과음 재생
     if (typeof Sound !== 'undefined') {
@@ -1025,6 +1042,7 @@ const InuDrawGame = (() => {
           type: 'inu_draw_submit',
           playerId: _myId,
           playerName: _myName,
+          isHost: _isHost,
           score: result.score,
           matchRate: result.matchRate,
           meanDist: result.meanDist,
@@ -1039,7 +1057,7 @@ const InuDrawGame = (() => {
 
       // 호스트인 경우: 모든 참가자가 제출했는지 확인
       if (_isHost) {
-        const submittedCount = Object.keys(_submissions).length;
+        const submittedCount = _players.filter(p => !!_findPlayerSub(p)).length;
         if (submittedCount >= _players.length) {
           setTimeout(() => {
             _revealScoresForAll();
@@ -1059,7 +1077,7 @@ const InuDrawGame = (() => {
     const overlay = document.getElementById('inu-draw-waiting-overlay');
     const countEl = document.getElementById('inu-waiting-count-text');
     const badgeEl = document.getElementById('inu-draw-players-count');
-    const submittedCount = Object.keys(_submissions).length;
+    const submittedCount = _players.filter(p => !!_findPlayerSub(p)).length;
     if (countEl) countEl.textContent = `${submittedCount} / ${_players.length}명 제출 완료`;
     if (badgeEl) badgeEl.textContent = `제출: ${submittedCount} / ${_players.length}명`;
     if (overlay) overlay.classList.remove('hidden');
@@ -1079,12 +1097,14 @@ const InuDrawGame = (() => {
     _hideWaitingOverlay();
 
     if (_isHost && _players.length > 1) {
-      // 미제출 참가자는 0점 처리 보정
+      // 혹시라도 제출 누락된 참가자는 0점 보정
       _players.forEach(p => {
-        if (!_submissions[p.id]) {
-          _submissions[p.id] = {
+        let existing = _findPlayerSub(p);
+        if (!existing) {
+          existing = {
             id: p.id,
             name: p.name || '참가자',
+            isHost: !!p.isHost,
             score: 0,
             matchRate: 0,
             meanDist: 99.9,
@@ -1092,6 +1112,8 @@ const InuDrawGame = (() => {
             dataUrl: '',
             penaltyReason: '시간 초과로 미제출 처리되었습니다.'
           };
+          if (p.id) _submissions[p.id] = existing;
+          if (p.name) _submissions[p.name] = existing;
         }
       });
 
@@ -1103,7 +1125,7 @@ const InuDrawGame = (() => {
       }
     }
 
-    const mySub = _submissions[_myId] || {
+    const mySub = _findPlayerSub({ id: _myId, name: _myName }) || {
       score: 0,
       matchRate: 0,
       meanDist: 99.9,
@@ -1124,19 +1146,20 @@ const InuDrawGame = (() => {
     _showResultModal(resObj, mySub.timeSec, false);
 
     if (_onResult) {
-      const sorted = Object.entries(_submissions).sort((a, b) => (b[1].score || 0) - (a[1].score || 0));
-      if (sorted.length > 0) {
+      const ranked = _players.map(p => _findPlayerSub(p) || { name: p.name, score: 0 })
+        .sort((a, b) => (b.score || 0) - (a.score || 0));
+      if (ranked.length > 0) {
         _onResult({
-          winnerId: sorted[0][0],
-          winnerName: sorted[0][1].name,
-          score: sorted[0][1].score
+          winnerName: ranked[0].name,
+          score: ranked[0].score,
+          customLeaderboard: ranked
         });
       }
     }
   }
 
   /**
-   * 11. 결과 모달 렌더링
+   * 11. 결과 모달 렌더링 (체계화된 종료 화면: 모든 참가자 점수 및 오직 [방으로 돌아가기] 버튼)
    */
   function _showResultModal(result, timeUsed, isTimeOut) {
     const modal = document.getElementById('inu-draw-result-modal');
@@ -1162,12 +1185,75 @@ const InuDrawGame = (() => {
       rankColor = '#6b7280';
     }
 
+    // 🌟 멀티플레이 참가자 순위 정렬 (모든 참가자가 반드시 포함되도록 구성)
+    const rankedPlayers = _players.map(p => {
+      const sub = _findPlayerSub(p) || {
+        id: p.id,
+        name: p.name || '참가자',
+        score: 0,
+        matchRate: 0,
+        meanDist: 99.9,
+        timeSec: 30,
+        dataUrl: '',
+        penaltyReason: '미제출'
+      };
+      return sub;
+    }).sort((a, b) => (b.score || 0) - (a.score || 0) || (a.timeSec || 0) - (b.timeSec || 0));
+
     content.innerHTML = `
+      <!-- 🌟 [체계화 1] 2인 이상 대결 시 모든 사용자의 점수 및 그림 썸네일 스코어보드 -->
+      ${_players.length > 1 ? `
+        <div class="inu-draw-scoreboard-section">
+          <div class="inu-sb-header">
+            <div class="inu-sb-title"><i class="fa-solid fa-trophy" style="color:#FCAF15;"></i> 최종 대결 스코어보드</div>
+            <div class="inu-sb-badge"><i class="fa-solid fa-users"></i> 총 ${_players.length}명 참여</div>
+          </div>
+          <div class="inu-sb-cards-grid">
+            ${rankedPlayers.map((pSub, idx) => {
+              const isWinner = (idx === 0);
+              const isMe = (pSub.name === _myName || String(pSub.id) === String(_myId));
+              const medal = idx === 0 ? '🥇 1위 (우승)' : (idx === 1 ? '🥈 2위' : (idx === 2 ? '🥉 3위' : `${idx + 1}위`));
+              const medalColor = idx === 0 ? '#FCAF15' : (idx === 1 ? '#94a3b8' : '#d97706');
+              return `
+                <div class="inu-sb-player-card ${isWinner ? 'is-winner' : ''} ${isMe ? 'is-me' : ''}">
+                  <div class="inu-sb-card-top">
+                    <span class="inu-sb-medal" style="color:${medalColor};">${medal}</span>
+                    ${isMe ? '<span class="inu-sb-me-tag">나</span>' : ''}
+                  </div>
+                  ${pSub.dataUrl ? `
+                    <div class="inu-sb-drawing-thumb-wrap">
+                      <img src="${pSub.dataUrl}" class="inu-sb-drawing-thumb" alt="${_escapeHtml(pSub.name)}의 그림" />
+                    </div>
+                  ` : `
+                    <div class="inu-sb-drawing-thumb-wrap inu-sb-no-img">
+                      <i class="fa-solid fa-paintbrush"></i>
+                    </div>
+                  `}
+                  <div class="inu-sb-player-name">${_escapeHtml(pSub.name)}</div>
+                  <div class="inu-sb-score-row">
+                    <span class="inu-sb-score-num">${pSub.score}</span>
+                    <span class="inu-sb-score-unit">점</span>
+                  </div>
+                  <div class="inu-sb-substats">
+                    <span>일치율 <strong>${pSub.matchRate}%</strong></span> &bull; 
+                    <span>소요 <strong>${pSub.timeSec}s</strong></span>
+                  </div>
+                  ${pSub.penaltyReason ? `
+                    <div class="inu-sb-penalty-tag">${_escapeHtml(pSub.penaltyReason)}</div>
+                  ` : ''}
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      ` : ''}
+
+      <!-- 🌟 [체계화 2] 내 상세 분석 & 시각적 오버레이 비교 피드백 -->
       <div class="inu-draw-res-grid">
         <!-- 좌측: 비주얼 오버레이 비교 캔버스 -->
         <div class="inu-res-visual-box card">
           <div class="inu-res-vis-title">
-            <span>시각적 비교 피드백</span>
+            <span>내 그림 시각적 비교 피드백</span>
             <div class="inu-legend-row">
               <span class="inu-leg-dot" style="background:#10b981;"></span><span class="inu-leg-txt">일치 (±3px)</span>
               <span class="inu-leg-dot" style="background:#ef4444; margin-left:6px;"></span><span class="inu-leg-txt">오차</span>
@@ -1179,7 +1265,7 @@ const InuDrawGame = (() => {
           </div>
         </div>
 
-        <!-- 우측: 점수표 & 상세 수치 분석 -->
+        <!-- 우측: 내 점수표 & 상세 수치 분석 -->
         <div class="inu-res-score-box">
           <div class="inu-res-score-badge">
             <span class="inu-res-score-num" style="color:${rankColor};">${result.score}</span>
@@ -1209,24 +1295,6 @@ const InuDrawGame = (() => {
               <strong class="stat-v">${timeUsed}초</strong>
             </div>
           </div>
-
-          <!-- 멀티플레이 시 랭킹 리스트 -->
-          ${_players.length > 1 ? `
-            <div class="inu-res-multi-rank">
-              <div class="inu-res-mr-title"><i class="fa-solid fa-ranking-star"></i> 방 참가자 최종 순위</div>
-              <div class="inu-mr-list">
-                ${Object.values(_submissions)
-                  .sort((a, b) => b.score - a.score || a.timeSec - b.timeSec)
-                  .map((sub, idx) => `
-                    <div class="inu-mr-item ${sub.name === _myName ? 'is-me' : ''}">
-                      <span class="inu-mr-pos">${idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : `${idx + 1}위`}</span>
-                      <span class="inu-mr-name">${_escapeHtml(sub.name)}</span>
-                      <strong class="inu-mr-score">${sub.score}점 (${sub.timeSec}s)</strong>
-                    </div>
-                  `).join('')}
-              </div>
-            </div>
-          ` : ''}
         </div>
       </div>
     `;
@@ -1243,7 +1311,30 @@ const InuDrawGame = (() => {
   }
 
   /**
-   * 12. UI 이벤트 바인딩
+   * 12. 방으로 돌아가기 단일 액션 핸들러
+   */
+  function _returnToRoom(notifyP2P = true) {
+    const modal = document.getElementById('inu-draw-result-modal');
+    if (modal) modal.classList.add('hidden');
+    destroy();
+
+    // 멀티플레이 시 호스트가 나갈 때 전원 방으로 동시 복귀 신호 전송
+    if (notifyP2P && _isHost && typeof P2P !== 'undefined' && P2P.send) {
+      P2P.send({ type: 'inu_draw_exit_to_room' });
+    }
+
+    if (window.App && typeof window.App.exitGameToRoom === 'function') {
+      window.App.exitGameToRoom();
+    } else {
+      const leaveBtn = document.getElementById('btn-game-leave');
+      if (leaveBtn) {
+        leaveBtn.click();
+      }
+    }
+  }
+
+  /**
+   * 13. UI 이벤트 바인딩
    */
   function _bindEvents() {
     // 1. 색상 선택기
@@ -1339,65 +1430,20 @@ const InuDrawGame = (() => {
       submitBtn.addEventListener('click', () => _submitAndScore(false));
     }
 
-    // 8. 결과 모달 닫기 / 재도전
+    // 8. 🌟 [핵심 변경] 결과 모달: 오직 [방으로 돌아가기] 단일 버튼만 지원
+    const backToRoomBtn = document.getElementById('btn-draw-back-to-room');
+    if (backToRoomBtn) {
+      backToRoomBtn.addEventListener('click', () => _returnToRoom(true));
+    }
+
     const closeBtn = document.getElementById('btn-close-draw-modal');
     if (closeBtn) {
-      closeBtn.addEventListener('click', () => {
-        const modal = document.getElementById('inu-draw-result-modal');
-        if (modal) modal.classList.add('hidden');
-      });
-    }
-
-    const retryBtn = document.getElementById('btn-draw-retry');
-    if (retryBtn) {
-      retryBtn.addEventListener('click', () => {
-        const modal = document.getElementById('inu-draw-result-modal');
-        if (modal) modal.classList.add('hidden');
-        _clearCanvas(true);
-        _hasSubmitted = false;
-        _timeRemaining = TOTAL_DRAW_TIME;
-        _startCountdown(() => _startTimer());
-      });
-    }
-
-    const nextBtn = document.getElementById('btn-draw-next-stage');
-    if (nextBtn) {
-      nextBtn.addEventListener('click', () => {
-        const modal = document.getElementById('inu-draw-result-modal');
-        if (modal) modal.classList.add('hidden');
-        const others = [0, 1, 2].filter(i => i !== _currentStageIdx);
-        const nextIdx = others[Math.floor(Math.random() * others.length)];
-        _switchStage(nextIdx);
-      });
+      closeBtn.addEventListener('click', () => _returnToRoom(true));
     }
   }
 
   /**
-   * 13. 스테이지 전환 (호스트가 다음 판 시작 시 전체 동기화)
-   */
-  function _switchStage(idx) {
-    _customImgSrc = null;
-    _currentStageIdx = idx;
-    _hasSubmitted = false;
-    _hasRevealed = false;
-    _canDraw = false;
-    _undoStack = [];
-    _submissions = {};
-    _timeRemaining = TOTAL_DRAW_TIME;
-
-    if (_isHost && typeof P2P !== 'undefined' && P2P.send) {
-      P2P.send({
-        type: 'inu_draw_stage_change',
-        stageIdx: idx
-      });
-    }
-
-    _renderGameUI();
-    _startCountdown(() => _startTimer());
-  }
-
-  /**
-   * 14. P2P 네트워크 메시지 수신 핸들러 (동시 시작 & 동시 채점 동기화)
+   * 14. P2P 네트워크 메시지 수신 핸들러 (동시 시작, 채점 동기화, 방 복귀 동기화)
    */
   function _handleMessage(data) {
     if (!data || typeof data !== 'object') return;
@@ -1412,43 +1458,40 @@ const InuDrawGame = (() => {
       _renderGameUI();
       _startCountdown(() => _startTimer());
 
-    } else if (data.type === 'inu_draw_stage_change') {
-      _currentStageIdx = data.stageIdx !== undefined ? data.stageIdx : 0;
-      _customImgSrc = null;
-      _hasSubmitted = false;
-      _hasRevealed = false;
-      _canDraw = false;
-      _undoStack = [];
-      _submissions = {};
-      _timeRemaining = TOTAL_DRAW_TIME;
-      _renderGameUI();
-      _startCountdown(() => _startTimer());
-
     } else if (data.type === 'inu_draw_submit') {
-      _submissions[data.playerId] = {
+      const sub = {
         id: data.playerId,
         name: data.playerName,
-        score: data.score,
-        matchRate: data.matchRate,
-        meanDist: data.meanDist,
-        timeSec: data.timeSec,
-        dataUrl: data.dataUrl,
-        penaltyReason: data.penaltyReason
+        isHost: !!data.isHost,
+        score: Number(data.score) || 0,
+        matchRate: Number(data.matchRate) || 0,
+        meanDist: Number(data.meanDist) || 0,
+        timeSec: Number(data.timeSec) || 0,
+        dataUrl: data.dataUrl || '',
+        penaltyReason: data.penaltyReason || null
       };
 
+      if (data.playerId) _submissions[data.playerId] = sub;
+      if (data.playerName) _submissions[data.playerName] = sub;
+
+      // 호스트인 경우 다른 게스트들에게 릴레이
+      if (_isHost && typeof P2P !== 'undefined' && P2P.send) {
+        P2P.send(data);
+      }
+
       // 제출 카운트 배지 갱신
+      const submittedCount = _players.filter(p => !!_findPlayerSub(p)).length;
       const badgeCountEl = document.getElementById('inu-draw-players-count');
       if (badgeCountEl) {
-        badgeCountEl.textContent = `제출: ${Object.keys(_submissions).length} / ${_players.length}명`;
+        badgeCountEl.textContent = `제출: ${submittedCount} / ${_players.length}명`;
       }
       const waitCountEl = document.getElementById('inu-waiting-count-text');
       if (waitCountEl) {
-        waitCountEl.textContent = `${Object.keys(_submissions).length} / ${_players.length}명 제출 완료`;
+        waitCountEl.textContent = `${submittedCount} / ${_players.length}명 제출 완료`;
       }
 
       // 호스트인 경우: 전원 제출 완료 시 채점 동시 공개 트리거!
       if (_isHost && !_hasRevealed) {
-        const submittedCount = Object.keys(_submissions).length;
         if (submittedCount >= _players.length) {
           setTimeout(() => {
             _revealScoresForAll();
@@ -1459,9 +1502,13 @@ const InuDrawGame = (() => {
     } else if (data.type === 'inu_draw_reveal') {
       // 호스트가 보낸 최종 채점 결과 수신 -> 전 참가자 동시 결과 모달 오픈!
       if (data.submissions) {
-        _submissions = data.submissions;
+        Object.assign(_submissions, data.submissions);
       }
       _revealScoresForAll();
+
+    } else if (data.type === 'inu_draw_exit_to_room') {
+      // 방장이 방으로 돌아갔을 때 모든 참가자도 방으로 함께 복귀
+      _returnToRoom(false);
     }
   }
 
