@@ -1472,6 +1472,13 @@
   color: var(--t3);
 }
 
+.inu-sb-acc-prefix {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--t2);
+  margin-right: 3px;
+}
+
 .inu-sb-substats {
   font-size: 0.72rem;
   color: var(--t3);
@@ -1566,6 +1573,13 @@
   align-items: baseline;
   justify-content: center;
   gap: 4px;
+}
+
+.inu-res-score-prefix {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--t2);
+  margin-right: 4px;
 }
 
 .inu-res-score-num {

@@ -5471,6 +5471,19 @@
 
   // 게임 결과 콜백
   function _handleGameResult(win, drawInfo, customLeaderboard) {
+    // 🌟 횃불이 그리기 게임은 자체 정밀 분석 모달(정확도 % 및 비주얼 오버레이)을 사용하므로
+    // '승리!' 오버레이로 덮지 않고, 정확도 정보를 전달받으면 경험치만 정산 후 리턴합니다.
+    if (selectedGameKey === 'inu_draw') {
+      let drawScore = 0;
+      if (typeof win === 'object' && win !== null) {
+        drawScore = Number(win.score) || 0;
+      }
+      try {
+        _addExperience(Math.max(10, Math.round(drawScore * 0.8)));
+      } catch (_) {}
+      return;
+    }
+
     let resultType = 'lose';
     let iAmWinner = false;
 

@@ -343,8 +343,8 @@ const InuDrawGame = (() => {
           <div class="modal-card inu-draw-result-card custom-scroll">
             <div class="modal-header">
               <h3 class="modal-title">
-                <i class="fa-solid fa-award" style="color:#FCAF15;"></i>
-                <span>정확도 정밀 채점 리포트</span>
+                <i class="fa-solid fa-bullseye" style="color:#FCAF15;"></i>
+                <span>정확도 판정 리포트</span>
               </h3>
               <button type="button" class="btn-icon sm" id="btn-close-draw-modal">
                 <i class="fa-solid fa-xmark"></i>
@@ -1166,22 +1166,22 @@ const InuDrawGame = (() => {
     const content = document.getElementById('inu-draw-result-content');
     if (!modal || !content) return;
 
-    let titleRank = '🏆 횃불이 마스터 화가!';
+    let titleRank = `정확도 ${result.score}% 달성!`;
     let rankColor = '#0A4A9B';
     if (result.score >= 90) {
-      titleRank = '🏆 횃불이 마스터 화가!';
+      titleRank = `정확도 ${result.score}% (마스터 화가급)`;
       rankColor = '#FCAF15';
     } else if (result.score >= 80) {
-      titleRank = '✨ 인천대 미대 수석급 재능!';
+      titleRank = `정확도 ${result.score}% (우수 묘사)`;
       rankColor = '#0A4A9B';
     } else if (result.score >= 65) {
-      titleRank = '🎨 훌륭한 묘사력!';
+      titleRank = `정확도 ${result.score}% (준수한 묘사)`;
       rankColor = '#10b981';
     } else if (result.score >= 45) {
-      titleRank = '👍 개성 넘치는 횃불이!';
+      titleRank = `정확도 ${result.score}% (개성 넘치는 횃불이)`;
       rankColor = '#3b82f6';
     } else {
-      titleRank = '🐥 조금 더 관찰해 볼까요?';
+      titleRank = `정확도 ${result.score}% (조금 더 관찰해 볼까요?)`;
       rankColor = '#6b7280';
     }
 
@@ -1201,18 +1201,18 @@ const InuDrawGame = (() => {
     }).sort((a, b) => (b.score || 0) - (a.score || 0) || (a.timeSec || 0) - (b.timeSec || 0));
 
     content.innerHTML = `
-      <!-- 🌟 [체계화 1] 2인 이상 대결 시 모든 사용자의 점수 및 그림 썸네일 스코어보드 -->
+      <!-- 🌟 [체계화 1] 2인 이상 대결 시 모든 사용자의 정확도(%) 및 그림 썸네일 스코어보드 -->
       ${_players.length > 1 ? `
         <div class="inu-draw-scoreboard-section">
           <div class="inu-sb-header">
-            <div class="inu-sb-title"><i class="fa-solid fa-trophy" style="color:#FCAF15;"></i> 최종 대결 스코어보드</div>
+            <div class="inu-sb-title"><i class="fa-solid fa-bullseye" style="color:#0A4A9B;"></i> 참가자 정확도 판정 결과</div>
             <div class="inu-sb-badge"><i class="fa-solid fa-users"></i> 총 ${_players.length}명 참여</div>
           </div>
           <div class="inu-sb-cards-grid">
             ${rankedPlayers.map((pSub, idx) => {
               const isWinner = (idx === 0);
               const isMe = (pSub.name === _myName || String(pSub.id) === String(_myId));
-              const medal = idx === 0 ? '🥇 1위 (우승)' : (idx === 1 ? '🥈 2위' : (idx === 2 ? '🥉 3위' : `${idx + 1}위`));
+              const medal = idx === 0 ? '🥇 1위' : (idx === 1 ? '🥈 2위' : (idx === 2 ? '🥉 3위' : `${idx + 1}위`));
               const medalColor = idx === 0 ? '#FCAF15' : (idx === 1 ? '#94a3b8' : '#d97706');
               return `
                 <div class="inu-sb-player-card ${isWinner ? 'is-winner' : ''} ${isMe ? 'is-me' : ''}">
@@ -1231,12 +1231,13 @@ const InuDrawGame = (() => {
                   `}
                   <div class="inu-sb-player-name">${_escapeHtml(pSub.name)}</div>
                   <div class="inu-sb-score-row">
+                    <span class="inu-sb-acc-prefix">정확도</span>
                     <span class="inu-sb-score-num">${pSub.score}</span>
-                    <span class="inu-sb-score-unit">점</span>
+                    <span class="inu-sb-score-unit">%</span>
                   </div>
                   <div class="inu-sb-substats">
-                    <span>일치율 <strong>${pSub.matchRate}%</strong></span> &bull; 
-                    <span>소요 <strong>${pSub.timeSec}s</strong></span>
+                    <span>외곽선 일치 <strong>${pSub.matchRate}%</strong></span> &bull; 
+                    <span>소요 <strong>${pSub.timeSec}초</strong></span>
                   </div>
                   ${pSub.penaltyReason ? `
                     <div class="inu-sb-penalty-tag">${_escapeHtml(pSub.penaltyReason)}</div>
@@ -1268,8 +1269,9 @@ const InuDrawGame = (() => {
         <!-- 우측: 내 점수표 & 상세 수치 분석 -->
         <div class="inu-res-score-box">
           <div class="inu-res-score-badge">
+            <span class="inu-res-score-prefix">정확도</span>
             <span class="inu-res-score-num" style="color:${rankColor};">${result.score}</span>
-            <span class="inu-res-score-unit">점</span>
+            <span class="inu-res-score-unit">%</span>
           </div>
 
           <div class="inu-res-rank-title" style="color:${rankColor};">${titleRank}</div>
@@ -1283,7 +1285,11 @@ const InuDrawGame = (() => {
 
           <div class="inu-res-stat-table">
             <div class="inu-stat-row">
-              <span class="stat-k"><i class="fa-solid fa-bullseye"></i> 외곽선 일치율</span>
+              <span class="stat-k"><i class="fa-solid fa-bullseye"></i> 최종 정확도</span>
+              <strong class="stat-v" style="color:var(--primary); font-size:1.05rem;">${result.score}%</strong>
+            </div>
+            <div class="inu-stat-row">
+              <span class="stat-k"><i class="fa-solid fa-chart-pie"></i> 외곽선 일치율</span>
               <strong class="stat-v">${result.matchRate}%</strong>
             </div>
             <div class="inu-stat-row">
