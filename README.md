@@ -1,5 +1,7 @@
 # INU 아케이드 (INU Arcade)
 
+https://inu-arcade.netlify.app/
+
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 웹 브라우저에서 별도 설치 없이 링크 하나로 친구들과 함께 즐길 수 있는 인천대학교 실시간 멀티플레이 웹 아케이드 플랫폼입니다.
@@ -60,7 +62,7 @@
 python -m http.server 8080
 ```
 
-웹 브라우저에서 `http://localhost:8080`으로 접속하여 즉시 플레이할 수 있습니다.
+웹 브라우저에서 `inu-arcade.netlify.app`으로 접속하여 즉시 플레이할 수 있습니다.
 
 ---
 
