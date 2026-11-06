@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <title>INU 아케이드</title>
+  
+  <!-- 🔍 검색엔진 최적화 (SEO) 메타 태그 -->
+  <meta name="description" content="INU 아케이드(INU Arcade)는 설치 없이 브라우저에서 친구와 함께 즐기는 실시간 멀티플레이 웹 아케이드 플랫폼입니다. 인천대 퀴즈, 뽀모도로 스터디룸, 횃불이 그리기 등 다채로운 대전 게임과 스터디 공간을 무료로 플레이해보세요!" />
+  <meta name="keywords" content="INU 아케이드, INU Arcade, inu arcade, 인천대학교, 인천대 퀴즈, 스터디룸, 횃불이 그리기, 웹게임, 멀티게임, 실시간 멀티플레이, 브라우저 게임, 무료 웹게임" />
+  <meta name="author" content="INU Arcade Team" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://gachiarcade.kro.kr/" />
+
+  <!-- 🔍 구글 서치 콘솔(Google Search Console) 소유권 확인 태그 -->
+  <meta name="google-site-verification" content="fe1dQQTqFu0LW-H1JIGaoPeFXu-8-6--BECt6qq8mTA" />
+  <!-- 🔍 네이버 웹마스터도구(Naver Search Advisor) 소유권 확인 태그 (선택 사항) -->
+  <meta name="naver-site-verification" content="" />
+
+  <!-- 🌟 파비콘 (Favicon) & 모바일 앱 아이콘 (로컬 상대경로 + 캐시 버스팅) -->
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico?v=2.0.1" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico?v=2.0.1" sizes="16x16 32x32 48x48 64x64 128x128 256x256" />
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon.png?v=2.0.1" />
+  <meta name="theme-color" content="#f8fafc" />
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8fafc" />
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f172a" />
+  <meta name="msapplication-navbutton-color" content="#f8fafc" />
+
+  <!-- 💬 카카오톡 & SNS 오픈그래프 (Open Graph) 메타 태그 -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="INU 아케이드" />
+  <meta property="og:url" content="https://gachiarcade.kro.kr/" />
+  <meta property="og:title" content="INU 아케이드" />
+  <meta property="og:description" content="설치 없이 브라우저에서 링크 하나로 함께 즐기는 인천대학교 웹 플랫폼! 인천대 퀴즈 &amp; 스터디룸 지원." />
+  <meta property="og:image" content="https://gachiarcade.kro.kr/og-image-v2.png?v=20260919_v6" />
+  <meta property="og:image:secure_url" content="https://gachiarcade.kro.kr/og-image-v2.png?v=20260919_v6" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="INU 아케이드" />
+  <meta property="og:locale" content="ko_KR" />
+  <meta property="og:locale:alternate" content="en_US" />
+
+  <!-- 🐦 트위터 카드 (Twitter Card) -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="INU 아케이드" />
+  <meta name="twitter:description" content="친구와 브라우저에서 바로 즐기는 실시간 멀티플레이 웹 아케이드" />
+  <meta name="twitter:image" content="https://gachiarcade.kro.kr/og-image-v2.png?v=20260919_v6" />
+
+  <!-- 📊 구글 사이트 이름(Site Name) 지정 공식 구조화된 데이터 (WebSite Schema) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": "https://gachiarcade.kro.kr/#website",
+    "name": "INU 아케이드",
+    "alternateName": ["INU Arcade", "inu arcade", "INU 아케이드"],
+    "url": "https://gachiarcade.kro.kr/"
+  }
+  </script>
+
+  <!-- 📊 웹 애플리케이션 구조화된 데이터 (WebApplication Schema) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "INU 아케이드",
+    "alternateName": ["INU Arcade", "inu arcade"],
+    "url": "https://gachiarcade.kro.kr/",
+    "applicationCategory": "GameApplication",
+    "operatingSystem": "All",
+    "browserRequirements": "Requires JavaScript. Requires HTML5.",
+    "genre": "Arcade, Multiplayer, Quiz, Study, Drawing",
+    "description": "설치 없이 웹 브라우저에서 친구와 바로 즐기는 실시간 멀티플레이 웹 아케이드 플랫폼. 인천대 퀴즈, 스터디룸, 횃불이 그리기 등 다채로운 게임 및 학습 환경 제공.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "KRW"
+    }
+  }
+  </script>
+
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <script src="js/i18n.js"></script>
+  <link rel="stylesheet" href="css/style.css?v=1.19.14" />
+  <link rel="stylesheet" href="css/games.css?v=1.19.14" />
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SCREEN: HOME
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-home" class="screen active">
+
+  <!-- 🌟 로비 상단 바 🌟 -->
+  <header class="room-header lobby-topbar">
+    <!-- 좌측: 밸런서 (중앙 로고 정렬용) -->
+    <div class="lobby-topbar-left"></div>
+
+    <!-- 중앙: INU 아케이드 로고 -->
+    <div class="room-title">
+      <div class="topbar-logo">
+        <div class="logo-icon-wrap">
+          <img src="favicon.png?v=2.0.1" alt="INU 아케이드 로고" class="topbar-logo-svg" />
+        </div>
+        <span class="logo-title">INU 아케이드</span>
+      </div>
+    </div>
+
+    <!-- 우측: 친구 목록 & 설정 버튼 -->
+    <div class="room-header-actions" style="display:flex; align-items:center; gap:8px;">
+      <button type="button" class="btn-icon" id="btn-open-settings" title="환경 설정">
+        <i class="fa-solid fa-gear"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- 로비 모바일 채팅 토글 플로팅 버튼 & 백드롭 (방 화면과 동일한 좌하단 버튼) -->
+  <button type="button" class="btn btn-primary btn-sm btn-mobile-chat-toggle" id="btn-lobby-mobile-chat-toggle" title="채팅창 열기">
+    <i class="fa-solid fa-comment-dots"></i>
+    <span>채팅</span>
+    <span class="chat-badge-dot hidden" id="lobby-mobile-chat-badge"></span>
+  </button>
+  <div class="mobile-chat-backdrop hidden" id="lobby-mobile-chat-backdrop"></div>
+
+  <!-- 로비 본체 (사이드바 + 메인 영역) -->
+  <div class="home-body-wrap">
+    <!-- 왼쪽 사이드바: 게임 목록 -->
+    <aside class="home-sidebar">
+      <!-- 🌟 사이드바 상단: 프로필 카드 바 (원래 로고 있던 자리) 🌟 -->
+      <div class="sidebar-header sidebar-profile-header">
+        <div class="home-user-bar">
+          <div class="user-avatar-wrap">
+            <div class="user-avatar" id="home-user-avatar">?</div>
+            <span class="user-level-badge" id="home-user-level">1</span>
+          </div>
+          <div class="user-info">
+            <div class="user-name-line">
+              <strong class="user-name" id="home-user-name">플레이어</strong>
+            </div>
+            <div class="user-exp-track" id="home-user-exp-track" title="내 레벨 경험치">
+              <div class="user-exp-fill" id="home-user-exp-fill" style="width: 0%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 🌟 실시간 접속자 카드 (사이드바 위치 배치) 🌟 -->
+      <div class="online-users-card card" id="online-users-card">
+        <div class="online-card-header">
+          <div class="online-card-title">
+            <span class="online-live-dot"></span>
+            <span>접속 중인 플레이어</span>
+            <span class="online-count-badge" id="online-users-count">1명</span>
+          </div>
+        </div>
+        <div class="online-users-list custom-scroll" id="online-users-list">
+          <!-- JS 동적 생성 -->
+        </div>
+      </div>
+
+    <nav class="sidebar-games">
+      <p class="sidebar-label">인천대 아케이드 & 스터디</p>
+      <ul>
+        <li class="sidebar-game-item active" data-game="inu_quiz">
+          <div class="sg-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+          <div class="sg-info">
+            <strong>인천대 퀴즈</strong>
+            <span>선착순 스피드 퀴즈</span>
+          </div>
+          <div class="sg-tag tag-multi">1~8인</div>
+        </li>
+        <li class="sidebar-game-item" data-game="inu_study">
+          <div class="sg-icon"><i class="fa-solid fa-book-open-reader"></i></div>
+          <div class="sg-info">
+            <strong>스터디룸</strong>
+            <span>뽀모도로 함께 공부</span>
+          </div>
+          <div class="sg-tag tag-multi">1~8인</div>
+        </li>
+        <li class="sidebar-game-item" data-game="inu_draw">
+          <div class="sg-icon"><i class="fa-solid fa-paintbrush"></i></div>
+          <div class="sg-info">
+            <strong>횃불이 그리기</strong>
+            <span>정확도 캔버스 대결</span>
+          </div>
+          <div class="sg-tag tag-multi">1~8인</div>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-copyright">
+        <span>© 2026 INU Arcade. All rights reserved.</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- 오른쪽: 메인 영역 (좌측: 실시간 공개 방 목록, 우측: 방 만들기/참가) -->
+  <main class="home-main">
+    <div class="home-lobby-container">
+      
+      <!-- 1. 좌측 메인 컬럼: [방 목록 | 상점] 상단 대형 탭 및 카드 -->
+      <div class="lobby-card-col" id="lobby-card-col">
+
+        <!-- 1-1. 🌐 실시간 방 목록 (공개방 / 비밀방 필터 지원) -->
+        <div class="lobby-card card" id="lobby-room-card">
+          <div class="lobby-header">
+            <div class="lobby-title-area">
+              <strong class="lobby-title"><i class="fa-solid fa-list-ul"></i> 방 목록</strong>
+              <div class="lobby-tab-group" id="lobby-filter-tabs">
+                <button type="button" class="lobby-tab-btn active" data-lobby-tab="all" id="tab-lobby-all">
+                  <i class="fa-solid fa-border-all"></i> 전체
+                </button>
+                <button type="button" class="lobby-tab-btn" data-lobby-tab="public" id="tab-lobby-public">
+                  <i class="fa-solid fa-earth-americas"></i> 공개방
+                </button>
+                <button type="button" class="lobby-tab-btn" data-lobby-tab="private" id="tab-lobby-private">
+                  <i class="fa-solid fa-lock"></i> 비밀방
+                </button>
+              </div>
+            </div>
+            <div class="lobby-header-actions">
+              <select id="lobby-game-filter" class="lobby-game-select" title="게임별 방 필터">
+                <option value="all">모든 게임</option>
+              </select>
+            </div>
+          </div>
+          <div class="lobby-list is-empty" id="lobby-room-list">
+            <div class="lobby-empty">
+              <i class="fa-regular fa-compass"></i>
+              <p>현재 열려있는 공개방이 없습니다.<br>새로운 방을 직접 만들어 보세요!</p>
+            </div>
+          </div>
+          <!-- 🌟 방목록 카드 바로 아래 부착된 액션 바 (화면 잘림 완전 방지) 🌟 -->
+          <div class="mobile-lobby-action-row" id="mobile-lobby-action-row">
+            <button type="button" class="btn-mobile-lobby-chat" id="btn-mobile-lobby-chat" title="전체 채팅 열기">
+              <i class="fa-solid fa-comment-dots"></i>
+              <span class="chat-badge-dot hidden" id="mobile-lobby-chat-badge"></span>
+            </button>
+            <button type="button" class="btn-mobile-room-action" id="btn-mobile-room-action">
+              <i class="fa-solid fa-plus"></i>
+              <span>방 만들기</span>
+            </button>
+          </div>
+        </div>
+
+              </div> <!-- /.lobby-card-col -->
+
+      <!-- 2. 우측: 전체 채팅 카드 + 방 만들기/참가 패널 (하단 일치 컬럼) -->
+      <div class="lobby-right-col">
+        <!-- 2-1. 상단: 💬 로비 전체 채팅방 (프로필 이름: 메시지 형식) -->
+        <div class="lobby-chat-card card" id="lobby-chat-card">
+          <div class="lobby-chat-header">
+            <div class="lobby-chat-title">
+              <i class="fa-solid fa-comment-dots" style="color: var(--green);"></i>
+              <span>전체 채팅</span>
+            </div>
+            <button type="button" class="btn-icon sm btn-close-mobile-chat" id="btn-close-lobby-mobile-chat" title="채팅창 닫기">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <div class="lobby-chat-messages custom-scroll" id="lobby-chat-messages">
+            <!-- 채팅 메시지 동적 생성 -->
+            <div class="lobby-chat-welcome">
+              <i class="fa-regular fa-paper-plane"></i>
+              <span>로비 전체 채팅방입니다. 자유롭게 대화해보세요!</span>
+            </div>
+          </div>
+          <form class="lobby-chat-form" id="lobby-chat-form">
+            <input
+              type="text"
+              id="lobby-chat-input"
+              class="lobby-chat-input"
+              placeholder="메시지 입력..."
+              maxlength="80"
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <button type="submit" class="btn btn-primary btn-sm btn-lobby-chat-send" id="btn-lobby-chat-send" title="전송">
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </form>
+        </div>
+
+        <!-- 2-3. 하단: 방 만들기 / 참가 패널 -->
+        <div class="connect-card card">
+          <!-- 🌟 모바일 전용 방 만들기 헤더 (돌아가기 버튼) 🌟 -->
+          <div class="mobile-create-header" id="mobile-create-header">
+            <button type="button" class="btn-icon sm btn-back-to-room-list" id="btn-back-to-room-list" title="방 목록으로 돌아가기">
+              <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <strong class="mobile-create-title">방 설정</strong>
+            <div class="mobile-create-header-spacer"></div>
+          </div>
+
+          <div class="connect-tabs">
+          <button class="ctab active" data-tab="create" id="tab-create">
+            <i class="fa-solid fa-tower-broadcast"></i>
+            <span>방 만들기</span>
+          </button>
+          <button class="ctab" data-tab="join" id="tab-join">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <span>방 참가</span>
+          </button>
+        </div>
+
+        <!-- 방 만들기 패널 -->
+        <div class="ctab-panel active" id="panel-create">
+          <!-- ⚙️ 방 설정 옵션 (방 만들기 바로 위 밀착 배치) -->
+          <div class="create-room-options">
+            <!-- 1. 공개/비밀방 라디오 스위치 -->
+            <div class="create-opt-row">
+              <span class="create-opt-label"><i class="fa-solid fa-shield-halved"></i> 공개 설정</span>
+              <div class="room-type-toggle">
+                <label class="room-type-opt">
+                  <input type="radio" name="room-visibility" value="public" checked id="opt-room-public" />
+                  <span class="room-type-btn"><i class="fa-solid fa-earth-americas"></i> 공개방</span>
+                </label>
+                <label class="room-type-opt">
+                  <input type="radio" name="room-visibility" value="private" id="opt-room-private" />
+                  <span class="room-type-btn"><i class="fa-solid fa-lock"></i> 비밀방</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- 비밀번호 4자리 핀 입력란 (비밀방 선택 시 표시) -->
+            <div class="create-opt-row create-password-wrap hidden" id="create-password-wrap">
+              <span class="create-opt-label"><i class="fa-solid fa-key"></i> 비밀번호</span>
+              <div class="password-pin-box">
+                <input
+                  type="password"
+                  id="input-create-room-password"
+                  class="create-pwd-input"
+                  placeholder="● ● ● ●"
+                  maxlength="4"
+                  inputmode="numeric"
+                  autocomplete="off"
+                />
+              </div>
+            </div>
+
+            <!-- 2. 최대 인원 수 스피너 (2~8인) -->
+            <div class="create-opt-row">
+              <span class="create-opt-label"><i class="fa-solid fa-users"></i> 최대 인원</span>
+              <div class="capacity-stepper">
+                <button type="button" class="btn-step" id="btn-cap-minus" title="1명 감소">
+                  <i class="fa-solid fa-minus"></i>
+                </button>
+                <span class="capacity-val" id="capacity-val">5인</span>
+                <button type="button" class="btn-step" id="btn-cap-plus" title="1명 증가">
+                  <i class="fa-solid fa-plus"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-primary btn-lg" id="btn-create-room">
+            <i class="fa-solid fa-plus"></i>
+            <span>방 만들기</span>
+          </button>
+          <div class="code-reveal hidden" id="code-reveal">
+            <div class="code-reveal-label">방 코드</div>
+            <div class="code-display">
+              <span id="host-room-code">——</span>
+              <button class="btn-icon" id="btn-copy-code" title="복사">
+                <i class="fa-regular fa-copy"></i>
+              </button>
+            </div>
+            <div class="waiting-dots">
+              <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              <span>친구 연결 대기 중</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 방 참가 패널 -->
+        <div class="ctab-panel" id="panel-join">
+          <div class="panel-desc-box">
+            <h4>친구 방에 참가하기</h4>
+            <p>공유받은 4자리 방 코드를 입력하여 입장하세요.</p>
+          </div>
+          <div class="join-form">
+            <input
+              type="text"
+              id="input-room-code"
+              class="code-input-field"
+              placeholder="0 0 0 0"
+              maxlength="4"
+              inputmode="numeric"
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <button class="btn btn-gold btn-lg" id="btn-join-room">
+              <i class="fa-solid fa-arrow-right-to-bracket"></i>
+              <span>입장하기</span>
+            </button>
+          </div>
+          <div class="join-status hidden" id="join-status">
+            <div class="waiting-dots">
+              <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              <span id="join-status-text">연결 중...</span>
+            </div>
+          </div>
+        </div> <!-- /#panel-join -->
+      </div> <!-- /.connect-card -->
+    </div> <!-- /.lobby-right-col -->
+  </div> <!-- /.home-lobby-container -->
+
+  </main>
+  </div> <!-- /.home-body-wrap -->
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SCREEN: ROOM LOBBY
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-room" class="screen">
+  <!-- 방 헤더 -->
+  <header class="room-header">
+    <button class="btn btn-ghost btn-sm" id="btn-leave-room">
+      <i class="fa-solid fa-chevron-left"></i>
+      <span>로비로 나가기</span>
+    </button>
+    <div class="room-title">
+      <button type="button" class="room-code-badge" id="room-code-display" title="클릭하여 방 코드 복사">——</button>
+    </div>
+    <div class="room-header-actions" style="display:flex; gap:8px;">
+      <button class="btn-icon" id="btn-room-settings" title="환경설정">
+        <i class="fa-solid fa-gear"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- 방 모바일 채팅 토글 플로팅 버튼 & 백드롭 -->
+  <button type="button" class="btn btn-primary btn-sm btn-mobile-chat-toggle" id="btn-room-mobile-chat-toggle" title="채팅창 열기">
+    <i class="fa-regular fa-comments"></i>
+    <span>채팅</span>
+    <span class="chat-badge-dot hidden" id="room-mobile-chat-badge"></span>
+  </button>
+  <div class="mobile-chat-backdrop hidden" id="room-mobile-chat-backdrop"></div>
+
+<!-- 방 본체 (3단: 좌측 참가자 / 중앙 게임선택 / 우측 채팅) -->
+  <div class="room-body" id="room-body">
+
+    <!-- 1. 왼쪽 영역 (참가자 목록 + 이모지 패널) -->
+    <div class="room-left-panel">
+      <!-- 기존 참가자 목록 패널 -->
+      <section class="room-players-panel card">
+        <div class="panel-header">
+          <h3 class="panel-title"><i class="fa-solid fa-users"></i> 참가자 목록</h3>
+          <span class="panel-badge" id="player-count-badge">1명 접속</span>
+        </div>
+        <ul class="player-list" id="player-list">
+          <!-- JS로 동적 생성 -->
+        </ul>
+        <div class="player-slots" id="player-slots">
+          <!-- 빈 슬롯 JS 생성 -->
+        </div>
+      </section>
+
+      <!-- 신규: 감정표현 이모지 & 채팅 사이드 패널 -->
+      <div class="room-emoji-panel card" id="room-emoji-panel">
+        <div class="emoji-grid-2x2">
+          <button type="button" class="btn-emoji" data-emoji="😂" title="웃기">
+            <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f602.svg" alt="😂" class="emoji-img">
+          </button>
+          <button type="button" class="btn-emoji" data-emoji="😡" title="화남">
+            <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f621.svg" alt="😡" class="emoji-img">
+          </button>
+          <button type="button" class="btn-emoji" data-emoji="😮" title="놀람">
+            <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f62e.svg" alt="😮" class="emoji-img">
+          </button>
+          <button type="button" class="btn-emoji" data-emoji="🎉" title="축하">
+            <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f389.svg" alt="🎉" class="emoji-img">
+          </button>
+        </div>
+        <button type="button" class="btn-mobile-lobby-chat btn-card-side-chat" id="btn-room-side-chat" title="채팅 열기">
+          <i class="fa-solid fa-comment-dots"></i>
+          <span class="chat-badge-dot hidden" id="room-side-chat-badge"></span>
+        </button>
+      </div>
+
+
+    </div>
+
+    <!-- 2. 중앙: 게임 선택 카드 + 하단 팁 -->
+    <div class="room-center-wrap">
+      <section class="room-center-panel card">
+      <!-- 🎮 게임 진행 중 알림 배너 -->
+      <div class="room-playing-alert hidden" id="room-playing-alert">
+        <i class="fa-solid fa-circle-play"></i>
+        <span>현재 게임이 진행 중입니다. 대기실에서 대기하시거나 채팅에 참여해 보세요!</span>
+      </div>
+
+      <div class="game-select-panel">
+        <div class="panel-header">
+          <h3 class="panel-title"><i class="fa-solid fa-gamepad"></i> 게임 선택</h3>
+
+          <!-- 🌟 빨간색 표시 위치: 게임선택과 힌트 사이의 세부 설정 바 🌟 -->
+          <div class="game-extra-settings-bar hidden" id="game-extra-settings-bar">
+            <!-- 1. 라운드 설정 (끝말잇기, 캐치마인드, 타자연습 대결) -->
+            <div class="extra-setting-item hidden" id="game-rounds-setting">
+              <span class="esi-label"><i class="fa-solid fa-award"></i> 라운드:</span>
+              <div class="esi-stepper">
+                <button type="button" class="btn-step" id="btn-round-minus" title="1라운드 감소">
+                  <i class="fa-solid fa-minus"></i>
+                </button>
+                <span class="esi-val" id="game-round-val">3 라운드</span>
+                <button type="button" class="btn-step" id="btn-round-plus" title="1라운드 증가">
+                  <i class="fa-solid fa-plus"></i>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <span class="panel-sub" id="game-select-role-hint">방장만 변경 가능</span>
+        </div>
+
+        <!-- 🌟 신규: 현재 선택된 게임 프리뷰 요약 바 🌟 -->
+        <div class="room-selected-game-banner" id="room-selected-game-banner">
+          <div class="rsgb-icon-wrap" id="rsgb-icon-wrap">
+            <i class="fa-solid fa-graduation-cap" id="rsgb-icon"></i>
+          </div>
+          <div class="rsgb-content">
+            <div class="rsgb-title-row">
+              <strong class="rsgb-title" id="rsgb-title">인천대 퀴즈</strong>
+              <span class="rsgb-tag tag-multi" id="rsgb-tag">1~8인</span>
+            </div>
+            <span class="rsgb-desc" id="rsgb-desc">인천대학교에 관한 다채로운 퀴즈를 맞히는 선착순 스피드 배틀입니다.</span>
+          </div>
+        </div>
+
+        <div class="room-game-grid" id="room-game-grid">
+          <div class="room-game-btn selected" data-game="inu_quiz">
+            <div class="rgb-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+            <div class="rgb-info">
+              <strong>인천대 퀴즈</strong>
+              <span>선착순 스피드 퀴즈 배틀</span>
+            </div>
+            <span class="rgb-tag tag-multi">1~8인</span>
+          </div>
+          <div class="room-game-btn" data-game="inu_study">
+            <div class="rgb-icon"><i class="fa-solid fa-book-open-reader"></i></div>
+            <div class="rgb-info">
+              <strong>스터디룸</strong>
+              <span>뽀모도로 실시간 몰입 공부</span>
+            </div>
+            <span class="rgb-tag tag-multi">1~8인</span>
+          </div>
+          <div class="room-game-btn" data-game="inu_draw">
+            <div class="rgb-icon"><i class="fa-solid fa-paintbrush"></i></div>
+            <div class="rgb-info">
+              <strong>횃불이 그리기</strong>
+              <span>마스코트 정확도 챌린지</span>
+            </div>
+            <span class="rgb-tag tag-multi">1~8인</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 컨트롤 -->
+      <div class="room-controls">
+        <div class="guest-hint hidden" id="guest-wait-hint">
+          <i class="fa-solid fa-crown"></i> 방장이 게임을 선택하고 시작하기를 기다리고 있습니다.
+        </div>
+        <div class="control-row">
+          <button type="button" class="btn btn-ready" id="btn-ready">
+            <i class="fa-regular fa-circle"></i>
+            <span>준비하기</span>
+          </button>
+          <button type="button" class="btn btn-start hidden" id="btn-start-game" disabled>
+            <i class="fa-solid fa-play"></i>
+            <span>게임 시작</span>
+          </button>
+        </div>
+        <p class="ready-hint" id="ready-hint">모든 참가자가 준비해야 시작할 수 있습니다.</p>
+      </div>
+    </section>
+
+  </div>
+
+    <!-- 3. 오른쪽: 방 실시간 채팅창 -->
+    <section class="room-chat-panel card" id="room-chat-panel">
+      <div class="panel-header">
+        <h3 class="panel-title"><i class="fa-solid fa-comment-dots" style="color:var(--green);"></i> 실시간 채팅</h3>
+        <span class="chat-count-badge" id="chat-count-badge">ROOM</span>
+        <button type="button" class="btn-icon sm btn-close-mobile-chat" id="btn-close-room-mobile-chat" title="채팅창 닫기">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="chat-messages-wrap" id="room-chat-messages">
+        <div class="chat-system-msg">방 채팅에 입장했습니다. 매너 있는 대화를 나눠보세요!</div>
+      </div>
+      <div class="chat-input-form">
+        <input type="text" id="room-chat-input" class="chat-input" placeholder="메시지를 입력하세요..." maxlength="100" autocomplete="off" />
+        <button type="button" class="btn btn-primary btn-chat-send" id="btn-room-chat-send">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SCREEN: GAME (좌측 참가자 + 중앙 메인게임 + 우측 실시간 채팅)
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-game" class="screen">
+  <!-- 상단 게임 네비게이션 -->
+  <header class="game-header">
+    <button class="btn btn-ghost btn-sm" id="btn-back-to-room">
+      <i class="fa-solid fa-chevron-left"></i>
+      <span>방으로 돌아가기</span>
+    </button>
+    <div class="game-title-area">
+      <span id="current-game-title">게임</span>
+    </div>
+    <div class="game-header-actions">
+      <div class="game-room-badge">
+        <i class="fa-solid fa-hashtag"></i>
+        <span id="game-room-code">0000</span>
+      </div>
+      <button class="btn-icon" id="btn-game-settings" title="환경설정">
+        <i class="fa-solid fa-gear"></i>
+      </button>
+      <button type="button" class="btn btn-primary btn-sm btn-mobile-chat-toggle" id="btn-mobile-chat-toggle" title="채팅창 열기">
+        <i class="fa-regular fa-comments"></i>
+        <span>채팅</span>
+        <span class="chat-badge-dot hidden" id="mobile-chat-badge"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- 모바일 채팅 팝업 전용 백드롭 -->
+  <div class="mobile-chat-backdrop hidden" id="mobile-chat-backdrop"></div>
+
+<!-- 게임 메인 컨테이너 (3단: 좌측 참가자 / 중앙 메인게임 / 우측 인게임 채팅) -->
+  <div class="game-main-layout" id="game-main-layout">
+    
+    <!-- 1. 좌측 영역 (인게임 참가자 목록 + 이모지 패널) -->
+    <div class="game-left-panel">
+      <aside class="game-sidebar-players card">
+        <div class="gsp-header">
+          <h4><i class="fa-solid fa-users"></i> 참가자 (<span id="gsp-count">2</span>)</h4>
+        </div>
+        <!-- 좌측 퇴장 알림 영역 -->
+        <div class="gsp-alert-container" id="gsp-alert-container"></div>
+        <ul class="gsp-list" id="gsp-player-list">
+          <!-- JS 동적 생성 -->
+        </ul>
+      </aside>
+
+      <!-- 인게임 이모지 & 채팅 사이드 패널 -->
+      <div class="game-emoji-panel card" id="game-emoji-panel">
+        <div class="emoji-grid-2x2">
+          <button type="button" class="btn-emoji" data-emoji="😂" title="웃기">
+            <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f602.svg" alt="😂" class="emoji-img">
+          </button>
+          <button type="button" class="btn-emoji" data-emoji="😡" title="화남">
+            <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f621.svg" alt="😡" class="emoji-img">
+          </button>
+          <button type="button" class="btn-emoji" data-emoji="😮" title="놀람">
+            <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f62e.svg" alt="😮" class="emoji-img">
+          </button>
+          <button type="button" class="btn-emoji" data-emoji="🎉" title="축하">
+            <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f389.svg" alt="🎉" class="emoji-img">
+          </button>
+        </div>
+        <button type="button" class="btn-mobile-lobby-chat btn-card-side-chat" id="btn-game-side-chat" title="채팅 열기">
+          <i class="fa-solid fa-comment-dots"></i>
+          <span class="chat-badge-dot hidden" id="game-side-chat-badge"></span>
+        </button>
+      </div>
+
+
+    </div>
+
+    <!-- 2. 중앙 메인 게임 컨텐츠 영역 -->
+    <main class="game-play-area">
+      <div id="game-content"></div>
+    </main>
+
+    <!-- 3. 우측 인게임 실시간 채팅창 (모바일에서는 팝업 모달로 작동) -->
+    <aside class="game-chat-panel card" id="game-chat-panel">
+      <div class="gcp-header">
+        <h4><i class="fa-solid fa-comment-dots" style="color:var(--green);"></i> 인게임 채팅</h4>
+        <button type="button" class="btn-icon sm btn-close-mobile-chat" id="btn-close-mobile-chat" title="채팅창 닫기">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="chat-messages-wrap" id="game-chat-messages">
+        <div class="chat-system-msg">게임 중 실시간 응원과 대화를 나눠보세요!</div>
+      </div>
+      <div class="chat-input-form">
+        <input type="text" id="game-chat-input" class="chat-input" placeholder="메시지 입력..." maxlength="100" autocomplete="off" />
+        <button class="btn btn-primary btn-chat-send" id="btn-game-chat-send">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- 🎆 승리 세레머니 이펙트 전역 캔버스 (미리보기 및 승리 시 노출) -->
+<canvas id="victory-effects-canvas" class="victory-effects-canvas hidden"></canvas>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     OVERLAY: 결과
+═══════════════════════════════════════════════════════════════ -->
+<div id="overlay-result" class="overlay hidden">
+  <div class="result-modal card">
+    <div class="result-confetti" id="result-confetti"></div>
+    <div class="result-icon-wrap" id="result-icon">
+      <i class="fa-solid fa-trophy"></i>
+    </div>
+    <h2 id="result-title">승리!</h2>
+    <p id="result-message">축하합니다! 대결에서 승리하셨습니다.</p>
+    <div class="result-score-row" id="result-score-row"></div>
+    <div class="result-exp-box hidden" id="result-exp-box"></div>
+    <div class="result-actions">
+      <button type="button" class="btn btn-primary btn-lg" id="btn-result-back-room" style="width:100%;">
+        <i class="fa-solid fa-house"></i>
+        <span>방으로 돌아가기</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     OVERLAY: 환경 설정 (화면 테마 및 포인트 색상 조절)
+═══════════════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════════
+     OVERLAY: 환경 설정 (v1.1.0 — 5개 탭 분리 & 변경 이력 스크롤)
+═══════════════════════════════════════════════════════════════ -->
+<div id="overlay-settings" class="overlay hidden">
+  <div class="settings-modal card" id="settings-modal-card">
+    <!-- 헤더: 제목 + 닫기 버튼 -->
+    <div class="settings-header">
+      <h3><i class="fa-solid fa-gear"></i> 환경 설정</h3>
+      <button type="button" class="btn-close-settings" id="btn-close-settings" title="닫기">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <!-- 설정 컨텐츠 바디 -->
+    <div class="settings-body custom-scroll">
+
+      <!-- [탭 1] 🖥️ 화면 / 환경 설정 패널 -->
+      <div class="settings-tab-pane active" id="pane-settings-env">
+        <!-- 테마 설정 -->
+        <div class="setting-item">
+          <div class="setting-meta">
+            <div class="setting-title">
+              <i class="fa-solid fa-circle-half-stroke" style="color:var(--yellow);"></i>
+              <span>화면 테마</span>
+            </div>
+            <div class="theme-toggle-group" id="theme-toggle-group">
+              <button type="button" class="btn-theme-toggle active" id="btn-theme-light" data-theme="light">
+                <i class="fa-solid fa-sun"></i>
+                <span>라이트</span>
+              </button>
+              <button type="button" class="btn-theme-toggle" id="btn-theme-dark" data-theme="dark">
+                <i class="fa-solid fa-moon"></i>
+                <span>다크</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 포인트 색상 설정 -->
+        <div class="setting-item" style="flex-direction: column; align-items: flex-start; gap: 10px;">
+          <div class="setting-meta" style="width: 100%; justify-content: space-between;">
+            <div class="setting-title">
+              <i class="fa-solid fa-palette" style="color:var(--green);"></i>
+              <span>포인트 색상</span>
+            </div>
+            <span id="accent-color-name" style="font-size:0.85rem; font-weight:800; color:var(--green);">인천대 블루</span>
+          </div>
+          <div class="accent-color-palette" id="accent-color-palette">
+            <button type="button" class="accent-chip active" data-accent="navy" title="인천대 블루 (기본)" style="background:#0A4A9B; color:#0A4A9B;"></button>
+            <button type="button" class="accent-chip" data-accent="inu_gold" title="인천대 골드" style="background:#FCAF15; color:#FCAF15;"></button>
+            <button type="button" class="accent-chip" data-accent="classic" title="클래식 에메랄드" style="background:#10b981; color:#10b981;"></button>
+            <button type="button" class="accent-chip" data-accent="apple" title="애플 연두" style="background:#83c774; color:#83c774;"></button>
+            <button type="button" class="accent-chip" data-accent="blue" title="오션 블루" style="background:#2563eb; color:#2563eb;"></button>
+            <button type="button" class="accent-chip" data-accent="purple" title="네온 바이올렛" style="background:#8b5cf6; color:#8b5cf6;"></button>
+            <button type="button" class="accent-chip" data-accent="rose" title="코랄 로즈" style="background:#f43f5e; color:#f43f5e;"></button>
+            <button type="button" class="accent-chip" data-accent="amber" title="선셋 오렌지" style="background:#f59e0b; color:#f59e0b;"></button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 언어 전환용 hidden select (i18n.js _syncHeaderDropdown 호환) -->
+      <select id="select-global-language" style="display:none;" aria-hidden="true">
+        <option value="ko">한국어</option>
+        <option value="en">English</option>
+        <option value="es">Español</option>
+        <option value="tr">Türkçe</option>
+        <option value="ru">Русский</option>
+        <option value="zh">中文</option>
+        <option value="ja">日本語</option>
+      </select>
+
+    </div>
+
+    <!-- 모달 푸터: 버전 표시 + 확인/닫기 버튼 -->
+    <div class="settings-footer">
+      <div class="settings-footer-info">
+        <span class="settings-version-badge">v2.2.1</span>
+      </div>
+      <button type="button" class="btn btn-primary btn-sm" id="btn-confirm-settings">
+        <span data-i18n="settings.close">닫기</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     MODAL: Supabase 로그인 / 회원가입 모달
+═══════════════════════════════════════════════════════════════ -->
+<div id="auth-modal" class="overlay auth-modal-overlay hidden">
+  <div class="auth-modal-card card">
+    <div class="auth-modal-header">
+      <div class="auth-modal-title">
+        <i class="fa-solid fa-shield-halved" style="color:var(--green);"></i>
+        <span id="auth-modal-title-text">INU 아케이드 로그인</span>
+      </div>
+      <button type="button" class="btn-icon sm" id="btn-close-auth-modal" title="닫기">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <!-- 미설정 알림 배너 (config 미입력 시 표시) -->
+    <div id="auth-config-notice" class="auth-notice-banner hidden">
+      <i class="fa-solid fa-circle-info"></i>
+      <div>
+        <strong>Supabase 설정이 필요합니다.</strong>
+        <p>js/supabase-config.js에 Project URL과 anon public key를 입력해주세요.</p>
+      </div>
+    </div>
+
+    <!-- 상태 메시지 배너 -->
+    <div id="auth-feedback-msg" class="auth-feedback-banner hidden"></div>
+
+    <div class="auth-oauth-guide">
+      <p class="auth-oauth-guide-text">간편 소셜 로그인으로 1초 만에 INU 아케이드를 시작하세요.<br>로그인 시 전적, 레벨이 클라우드에 영구 보관됩니다.</p>
+    </div>
+
+    <div class="auth-oauth-btn-group">
+      <button type="button" class="btn-oauth btn-oauth-google" id="btn-oauth-google" title="Google로 간편 로그인">
+        <svg class="oauth-icon" viewBox="0 0 24 24" width="20" height="20">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+        </svg>
+        <span>Google 계정으로 계속</span>
+      </button>
+      <button type="button" class="btn-oauth btn-oauth-kakao btn-oauth-kakao-disabled" id="btn-oauth-kakao" disabled>
+        <svg class="oauth-icon" viewBox="0 0 24 24" width="19" height="19" fill="#aaaaaa">
+          <path d="M12 3c-5.523 0-10 3.582-10 8 0 2.868 1.895 5.385 4.743 6.74-.208.775-.75 2.808-.86 3.242-.136.539.197.532.415.387.172-.114 2.73-1.854 3.83-2.602.613.088 1.238.133 1.872.133 5.523 0 10-3.582 10-8s-4.477-8-10-8z"/>
+        </svg>
+        <span>카카오 계정으로 계속</span>
+      </button>
+      <p class="auth-google-only-notice"><i class="fa-solid fa-circle-info"></i> 현재 구글 로그인만 지원합니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     MODAL: 커스텀 확인 / 나가기 팝업 모달 (Confirm Modal)
+═══════════════════════════════════════════════════════════════ -->
+<div id="confirm-modal" class="overlay confirm-modal-overlay hidden">
+  <div class="confirm-modal-card card">
+    <div class="confirm-modal-icon-wrap danger" id="confirm-modal-icon">
+      <i class="fa-solid fa-door-open"></i>
+    </div>
+    <div class="confirm-modal-body">
+      <h3 class="confirm-modal-title" id="confirm-modal-title">확인</h3>
+      <p class="confirm-modal-message" id="confirm-modal-message">정말 진행하시겠습니까?</p>
+    </div>
+    <div class="confirm-modal-btn-row">
+      <button type="button" class="btn btn-outline" id="confirm-modal-cancel">취소</button>
+      <button type="button" class="btn btn-danger" id="confirm-modal-ok">나가기</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     OVERLAY: 카운트다운 (사과게임, 끝말잇기, 타자연습 시작 전 3, 2, 1)
+═══════════════════════════════════════════════════════════════ -->
+<div id="overlay-countdown" class="overlay countdown-overlay hidden">
+  <div class="countdown-modal">
+    <div class="countdown-number-wrap">
+      <span class="countdown-number" id="countdown-number">3</span>
+    </div>
+    <div class="countdown-sub" id="countdown-sub">잠시 후 게임이 시작됩니다!</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     OVERLAY: 로딩
+═══════════════════════════════════════════════════════════════ -->
+<div id="overlay-loading" class="overlay hidden">
+  <div class="loading-modal card" style="text-align:center;">
+    <div class="loading-ring">
+      <div></div><div></div><div></div><div></div>
+    </div>
+    <p id="loading-text" style="margin-bottom:12px;">연결 중...</p>
+    <button type="button" class="btn btn-secondary btn-sm" id="btn-cancel-loading" style="padding:6px 18px;font-size:0.85rem;border-radius:var(--radius-sm);">
+      <i class="fa-solid fa-xmark"></i>
+      <span>연결 취소</span>
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     OVERLAY: 비밀방 비밀번호 입력 모달
+═══════════════════════════════════════════════════════════════ -->
+<div id="overlay-room-password" class="overlay hidden">
+  <div class="pwd-modal card" style="max-width:320px;width:88%;text-align:center;padding:24px 20px;display:flex;flex-direction:column;gap:14px;border-radius:var(--radius-lg);">
+    <div style="width:48px;height:48px;border-radius:50%;background:var(--yellow-tint);border:1.5px solid var(--yellow-border);color:var(--yellow);display:flex;align-items:center;justify-content:center;margin:0 auto;font-size:1.3rem;">
+      <i class="fa-solid fa-lock"></i>
+    </div>
+    <h3 style="font-size:1.15rem;font-weight:800;color:var(--t1);margin:0;">비밀번호 입력</h3>
+    <input
+      type="password"
+      id="input-join-password"
+      class="code-input-field"
+      placeholder="● ● ● ●"
+      maxlength="4"
+      inputmode="numeric"
+      autocomplete="off"
+      style="font-size:1.4rem;letter-spacing:6px;height:44px;text-align:center;background:var(--bg-hover);"
+    />
+    <div style="display:flex;gap:8px;margin-top:2px;">
+      <button type="button" class="btn btn-outline btn-sm" id="btn-cancel-pwd" style="flex:1;">
+        <span>취소</span>
+      </button>
+      <button type="button" class="btn btn-primary btn-sm" id="btn-confirm-pwd" style="flex:1;">
+        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+        <span>입장</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     OVERLAY: 모바일 방 코드 직접 입력 모달
+═══════════════════════════════════════════════════════════════ -->
+<div id="overlay-mobile-code-join" class="overlay hidden">
+  <div class="pwd-modal card" style="max-width:320px;width:88%;text-align:center;padding:24px 20px;display:flex;flex-direction:column;gap:14px;border-radius:var(--radius-lg);">
+    <div style="width:48px;height:48px;border-radius:50%;background:var(--green-tint);border:1.5px solid var(--green-border);color:var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto;font-size:1.3rem;">
+      <i class="fa-solid fa-key"></i>
+    </div>
+    <h3 style="font-size:1.15rem;font-weight:800;color:var(--t1);margin:0;">코드 참가</h3>
+    <p style="font-size:0.82rem;color:var(--t3);margin:-6px 0 0;">공유받은 4자리 방 코드를 입력하세요.</p>
+    <input
+      type="text"
+      id="input-mobile-room-code"
+      class="code-input-field"
+      placeholder="0 0 0 0"
+      maxlength="4"
+      inputmode="numeric"
+      autocomplete="off"
+      style="font-size:1.5rem;letter-spacing:8px;height:48px;text-align:center;background:var(--bg-hover);"
+    />
+    <div style="display:flex;gap:8px;margin-top:2px;">
+      <button type="button" class="btn btn-outline btn-sm" id="btn-cancel-mobile-code" style="flex:1;">
+        <span>취소</span>
+      </button>
+      <button type="button" class="btn btn-primary btn-sm" id="btn-confirm-mobile-code" style="flex:1;">
+        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+        <span>입장</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     DROPDOWN: 참가자 프로필 메뉴 (전적 보기 & 방장 강퇴)
+═══════════════════════════════════════════════════════════════ -->
+<div id="host-action-dropdown" class="host-action-dropdown hidden">
+  <div class="host-action-target-name" id="host-action-target-name">플레이어</div>
+  <button type="button" class="host-action-btn transfer" id="btn-host-transfer">
+    <i class="fa-solid fa-crown"></i>
+    <span>방장 위임</span>
+  </button>
+  <button type="button" class="host-action-btn kick" id="btn-host-kick">
+    <i class="fa-solid fa-user-xmark"></i>
+    <span>강퇴하기</span>
+  </button>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     TOAST
+═══════════════════════════════════════════════════════════════ -->
+<div class="toast hidden" id="toast"></div>
+
+<script src="js/sound.js"></script>
+<script src="js/p2p.js"></script>
+<script src="js/games/inu_quiz.js"></script>
+<script src="js/games/inu_study.js"></script>
+<script src="js/games/inu_draw.js"></script>
+<script type="module" src="js/firebase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/supabase.js"></script>
+<script src="js/app.js?v=1.19.13"></script>
+
+</body>
+</html>
