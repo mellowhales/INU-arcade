@@ -1,7 +1,4 @@
-/**
- * app.js - P2P 아케이드 플랫폼 메인 컨트롤러
- * (2~5인 다중 플레이, 오목 반응형 & 2인 제한, 셔플, 실시간 퇴장 알림 및 참가자 목록 즉각 제거)
- */
+
 (() => {
   'use strict';
 
@@ -4869,7 +4866,7 @@
         }
 
         if (guests.length === 0) {
-          readyHint.textContent = '게임을 시작하려면 최소 1명의 참가자가 필요합니다.';
+          readyHint.textContent = '게임을 시작하려면 최소 2명의 참가자가 필요합니다.';
         } else if (isSelectedOverCapacity) {
           readyHint.textContent = `${selGameObj.title}은(는) ${selGameObj.maxPlayers}인 전용 게임입니다. 다른 게임을 선택해 주세요.`;
         } else if (!allGuestsReady) {
@@ -5723,21 +5720,21 @@
     inu_quiz: {
       title: '인천대 퀴즈',
       icon: 'fa-solid fa-graduation-cap',
-      tag: '1~8인 • 스피드 퀴즈',
+      tag: '2~8인 • 스피드 퀴즈',
       tagClass: 'tag-multi',
       desc: '인천대학교(INU)의 역사, 캠퍼스, 상징, 축제 등 다양한 퀴즈를 출제합니다! 선착순으로 가장 먼저 정답을 빠르게 입력하는 사람이 승리합니다.'
     },
     inu_study: {
       title: '스터디룸',
       icon: 'fa-solid fa-book-open-reader',
-      tag: '1~8인 • 뽀모도로 공부',
+      tag: '2~8인 • 뽀모도로 공부',
       tagClass: 'tag-multi',
       desc: '실시간 함께 공부하는 온라인 스터디룸입니다. 방장이 뽀모도로(집중/휴식) 타이머를 켜고 끄며 다 함께 몰입하여 공부할 수 있습니다.'
     },
     inu_draw: {
       title: '횃불이 그리기',
       icon: 'fa-solid fa-paintbrush',
-      tag: '1~8인 • 캔버스 드로잉',
+      tag: '2~8인 • 캔버스 드로잉',
       tagClass: 'tag-multi',
       desc: '인천대학교 공식 마스코트 횃불이(Hyoetbuli)를 보고 캔버스에 직접 따라 그리는 정확도 챌린지입니다! 외부 AI 없이 순수 거리 변환(Distance Transform) 알고리즘으로 정확도(%)를 정밀 채점합니다.'
     }

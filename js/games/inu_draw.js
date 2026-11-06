@@ -56,6 +56,8 @@ const InuDrawGame = (() => {
   let _startTime = 0;
   let _elapsedSec = 0;
   let _hasSubmitted = false;
+  let _hasRevealed = false;
+  let _hasHostSynced = false;
   let _canDraw = false;
 
   // 유저 캔버스 드로잉 상태
@@ -74,7 +76,7 @@ const InuDrawGame = (() => {
   let _guideMode = 'ghost';
 
   // 멀티플레이 제출 집계
-  let _submissions = {}; // { [playerId]: { name, score, matchRate, meanDist, timeSec, dataUrl } }
+  let _submissions = {}; // { [playerId]: { name, score, matchRate, meanDist, timeSec, dataUrl, penaltyReason, resultObj } }
 
   // 이미지 캐시 및 에지 데이터 캐시
   const _imageCache = {};
@@ -95,24 +97,66 @@ const InuDrawGame = (() => {
       ? _context.players
       : [{ id: _myId, name: _myName }];
 
-    // 🌟 3장의 횃불이 중 랜덤으로 1장만 무작위 선택!
-    _currentStageIdx = Math.floor(Math.random() * DRAW_STAGES.length);
     _customImgSrc = null;
     _timeRemaining = TOTAL_DRAW_TIME;
     _hasSubmitted = false;
+    _hasRevealed = false;
+    _hasHostSynced = false;
     _canDraw = false;
     _undoStack = [];
     _submissions = {};
 
     P2P.onMessage(_handleMessage);
 
-    // 에셋 사전 프리로드 후 UI 마운트 & 3, 2, 1 카운트다운 시작
-    _preloadStages(() => {
-      _renderGameUI();
-      _startCountdown(() => {
-        _startTimer();
+    if (_players.length > 1) {
+      if (_isHost) {
+        // 호스트: 3장의 횃불이 중 무작위 1종을 선정하여 모든 참가자와 동일하게 동기화!
+        _currentStageIdx = Math.floor(Math.random() * DRAW_STAGES.length);
+        _preloadStages(() => {
+          P2P.send({
+            type: 'inu_draw_init_sync',
+            stageIdx: _currentStageIdx,
+            players: _players
+          });
+          _renderGameUI();
+          _startCountdown(() => _startTimer());
+        });
+      } else {
+        // 게스트: 에셋을 먼저 프리로드하고 호스트의 시작 동기화 신호를 기다림
+        _preloadStages(() => {
+          if (_hasHostSynced) {
+            _renderGameUI();
+            _startCountdown(() => _startTimer());
+          } else {
+            _renderWaitingForHost();
+          }
+        });
+      }
+    } else {
+      // 1인 싱글플레이: 랜덤 1종 선택 후 즉시 3-2-1 카운트다운 시작
+      _currentStageIdx = Math.floor(Math.random() * DRAW_STAGES.length);
+      _preloadStages(() => {
+        _renderGameUI();
+        _startCountdown(() => _startTimer());
       });
-    });
+    }
+  }
+
+  function _renderWaitingForHost() {
+    if (!_container) return;
+    _container.innerHTML = `
+      <div class="inu-draw-wrap">
+        <div class="card inu-draw-header flex-center" style="padding:48px 24px; text-align:center; min-height:360px;">
+          <div style="font-size:3rem; color:#FCAF15; margin-bottom:16px;">
+            <i class="fa-solid fa-spinner fa-spin"></i>
+          </div>
+          <h3 style="font-size:1.3rem; font-weight:900; color:var(--t1);">방장의 시작 신호를 기다리고 있습니다...</h3>
+          <p style="font-size:0.9rem; color:var(--t3); margin-top:8px;">
+            모든 참가자가 동일한 횃불이로 함께 카운트다운을 시작합니다!
+          </p>
+        </div>
+      </div>
+    `;
   }
 
   /**
@@ -164,6 +208,12 @@ const InuDrawGame = (() => {
           </div>
 
           <div class="inu-draw-header-right">
+            ${_players.length > 1 ? `
+              <div class="inu-draw-header-players" id="inu-draw-players-badge">
+                <i class="fa-solid fa-users" style="color:#0A4A9B;"></i>
+                <span id="inu-draw-players-count">제출: ${Object.keys(_submissions).length} / ${_players.length}명</span>
+              </div>
+            ` : ''}
             <div class="inu-draw-stage-name-badge">
               <i class="fa-solid fa-fire" style="color:#FCAF15;"></i>
               <span>오늘의 횃불이: <strong>${_escapeHtml(currentStage.title)}</strong> (${currentStage.difficulty})</span>
@@ -239,6 +289,16 @@ const InuDrawGame = (() => {
                 <div class="inu-countdown-sub" id="inu-countdown-sub">준비하세요!</div>
               </div>
 
+              <!-- 다른 플레이어 제출 대기 오버레이 (멀티플레이) -->
+              <div class="inu-draw-waiting-overlay hidden" id="inu-draw-waiting-overlay">
+                <div class="inu-waiting-icon"><i class="fa-solid fa-palette"></i></div>
+                <div class="inu-waiting-title">내 그림 제출 완료!</div>
+                <div class="inu-waiting-sub">모든 참가자가 그리기를 마칠 때까지 잠시만 기다려 주세요.</div>
+                <div class="inu-waiting-progress-badge" id="inu-waiting-progress">
+                  <i class="fa-solid fa-users"></i> <span id="inu-waiting-count-text">1 / ${_players.length}명 제출 완료</span>
+                </div>
+              </div>
+
               <!-- 밑그림 가이드 레이어 (설정에 따라 투명도 조절) -->
               <img id="inu-canvas-ghost-guide" class="inu-canvas-ghost-guide ${_guideMode === 'ghost' ? '' : 'hidden'}" src="${currentStage.src}" />
 
@@ -296,8 +356,20 @@ const InuDrawGame = (() => {
             </div>
 
             <div class="modal-footer inu-draw-result-footer">
-              <button type="button" class="btn btn-outline" id="btn-draw-retry">다시 그리기</button>
-              <button type="button" class="btn btn-gold" id="btn-draw-next-stage">새로운 횃불이 도전</button>
+              ${_players.length > 1 ? `
+                ${_isHost ? `
+                  <button type="button" class="btn btn-gold" id="btn-draw-next-stage">
+                    <i class="fa-solid fa-dice"></i> 새로운 횃불이 도전 (다음 판)
+                  </button>
+                ` : `
+                  <div style="font-size:0.88rem; font-weight:800; color:var(--t2); display:flex; align-items:center; gap:6px;">
+                    <i class="fa-solid fa-hourglass-half" style="color:#FCAF15;"></i> 방장이 다음 판을 시작하기를 기다리는 중...
+                  </div>
+                `}
+              ` : `
+                <button type="button" class="btn btn-outline" id="btn-draw-retry">다시 그리기</button>
+                <button type="button" class="btn btn-gold" id="btn-draw-next-stage">새로운 횃불이 도전</button>
+              `}
             </div>
           </div>
         </div>
@@ -561,7 +633,16 @@ const InuDrawGame = (() => {
         _updateTimerBarUI(0);
         _canDraw = false;
         if (!_hasSubmitted) {
-          _submitAndScore(true); // 30초 시간 초과 시 자동 채점 및 결과 출력!
+          _submitAndScore(true); // 30초 시간 초과 시 자동 채점 처리!
+        }
+        if (_players.length > 1) {
+          if (_isHost) {
+            setTimeout(() => {
+              _revealScoresForAll();
+            }, 800);
+          }
+        } else {
+          _revealScoresForAll();
         }
       } else {
         _updateTimerBarUI(_timeRemaining);
@@ -903,40 +984,30 @@ const InuDrawGame = (() => {
   }
 
   /**
-   * 10. 채점 결과 제출 처리
+   * 10. 채점 결과 제출 처리 (멀티플레이 동시 채점 동기화)
    */
   function _submitAndScore(isTimeOut = false) {
     if (_hasSubmitted) return;
     _hasSubmitted = true;
+    _canDraw = false;
     _stopTimer();
 
     const result = _calculateAccuracy();
-    const timeUsed = _elapsedSec || 1;
+    const timeUsed = _elapsedSec || (isTimeOut ? 30.0 : 1.0);
     const dataUrl = _drawCanvas ? _drawCanvas.toDataURL('image/png') : '';
 
     // 내 결과 기록
     _submissions[_myId] = {
+      id: _myId,
       name: _myName,
       score: result.score,
       matchRate: result.matchRate,
       meanDist: result.meanDist,
       timeSec: timeUsed,
-      dataUrl
+      dataUrl,
+      penaltyReason: result.penaltyReason,
+      resultObj: result
     };
-
-    // P2P 멀티플레이 제출 알림 브로드캐스트
-    if (typeof P2P !== 'undefined' && P2P.broadcast) {
-      P2P.broadcast({
-        type: 'inu_draw_submit',
-        playerId: _myId,
-        playerName: _myName,
-        score: result.score,
-        matchRate: result.matchRate,
-        meanDist: result.meanDist,
-        timeSec: timeUsed,
-        dataUrl
-      });
-    }
 
     // 효과음 재생
     if (typeof Sound !== 'undefined') {
@@ -947,9 +1018,121 @@ const InuDrawGame = (() => {
       }
     }
 
-    // 결과 모달 표출
-    _showResultModal(result, timeUsed, isTimeOut);
-    _updateMultiplayerStatus();
+    if (_players.length > 1) {
+      // 멀티플레이: 호스트 및 다른 참가자들에게 내 제출 정보 전송
+      if (typeof P2P !== 'undefined' && P2P.send) {
+        P2P.send({
+          type: 'inu_draw_submit',
+          playerId: _myId,
+          playerName: _myName,
+          score: result.score,
+          matchRate: result.matchRate,
+          meanDist: result.meanDist,
+          timeSec: timeUsed,
+          dataUrl,
+          penaltyReason: result.penaltyReason
+        });
+      }
+
+      // 내 캔버스 위에 대기 오버레이 표시 (다른 참가자 대기)
+      _showWaitingOverlay();
+
+      // 호스트인 경우: 모든 참가자가 제출했는지 확인
+      if (_isHost) {
+        const submittedCount = Object.keys(_submissions).length;
+        if (submittedCount >= _players.length) {
+          setTimeout(() => {
+            _revealScoresForAll();
+          }, 600);
+        }
+      }
+    } else {
+      // 1인 싱글플레이: 즉시 결과 공개
+      _showResultModal(result, timeUsed, isTimeOut);
+    }
+  }
+
+  /**
+   * 10-1. 멀티플레이 대기 오버레이
+   */
+  function _showWaitingOverlay() {
+    const overlay = document.getElementById('inu-draw-waiting-overlay');
+    const countEl = document.getElementById('inu-waiting-count-text');
+    const badgeEl = document.getElementById('inu-draw-players-count');
+    const submittedCount = Object.keys(_submissions).length;
+    if (countEl) countEl.textContent = `${submittedCount} / ${_players.length}명 제출 완료`;
+    if (badgeEl) badgeEl.textContent = `제출: ${submittedCount} / ${_players.length}명`;
+    if (overlay) overlay.classList.remove('hidden');
+  }
+
+  function _hideWaitingOverlay() {
+    const overlay = document.getElementById('inu-draw-waiting-overlay');
+    if (overlay) overlay.classList.add('hidden');
+  }
+
+  /**
+   * 10-2. 모든 참가자 점수 동시 공개 (Reveal Scores)
+   */
+  function _revealScoresForAll() {
+    if (_hasRevealed) return;
+    _hasRevealed = true;
+    _hideWaitingOverlay();
+
+    if (_isHost && _players.length > 1) {
+      // 미제출 참가자는 0점 처리 보정
+      _players.forEach(p => {
+        if (!_submissions[p.id]) {
+          _submissions[p.id] = {
+            id: p.id,
+            name: p.name || '참가자',
+            score: 0,
+            matchRate: 0,
+            meanDist: 99.9,
+            timeSec: 30,
+            dataUrl: '',
+            penaltyReason: '시간 초과로 미제출 처리되었습니다.'
+          };
+        }
+      });
+
+      if (typeof P2P !== 'undefined' && P2P.send) {
+        P2P.send({
+          type: 'inu_draw_reveal',
+          submissions: _submissions
+        });
+      }
+    }
+
+    const mySub = _submissions[_myId] || {
+      score: 0,
+      matchRate: 0,
+      meanDist: 99.9,
+      timeSec: 30,
+      penaltyReason: '제출 기록 없음'
+    };
+
+    const resObj = mySub.resultObj || {
+      score: mySub.score,
+      matchRate: mySub.matchRate,
+      meanDist: mySub.meanDist,
+      userBinary: _extractUserDrawingBinary(),
+      origBinary: _edgeCache[_customImgSrc ? 'custom' : DRAW_STAGES[_currentStageIdx].id],
+      origDistMap: null,
+      penaltyReason: mySub.penaltyReason
+    };
+
+    _showResultModal(resObj, mySub.timeSec, false);
+
+    if (_onResult) {
+      const sorted = Object.entries(_submissions).sort((a, b) => (b[1].score || 0) - (a[1].score || 0));
+      if (sorted.length > 0) {
+        _onResult({
+          winnerId: sorted[0][0],
+          winnerName: sorted[0][1].name,
+          score: sorted[0][1].score
+        });
+      }
+    }
   }
 
   /**
@@ -1030,7 +1213,7 @@ const InuDrawGame = (() => {
           <!-- 멀티플레이 시 랭킹 리스트 -->
           ${_players.length > 1 ? `
             <div class="inu-res-multi-rank">
-              <div class="inu-res-mr-title"><i class="fa-solid fa-ranking-star"></i> 방 실시간 순위</div>
+              <div class="inu-res-mr-title"><i class="fa-solid fa-ranking-star"></i> 방 참가자 최종 순위</div>
               <div class="inu-mr-list">
                 ${Object.values(_submissions)
                   .sort((a, b) => b.score - a.score || a.timeSec - b.timeSec)
@@ -1190,18 +1373,20 @@ const InuDrawGame = (() => {
   }
 
   /**
-   * 13. 스테이지 전환
+   * 13. 스테이지 전환 (호스트가 다음 판 시작 시 전체 동기화)
    */
   function _switchStage(idx) {
     _customImgSrc = null;
     _currentStageIdx = idx;
     _hasSubmitted = false;
+    _hasRevealed = false;
     _canDraw = false;
     _undoStack = [];
+    _submissions = {};
     _timeRemaining = TOTAL_DRAW_TIME;
 
-    if (_isHost && typeof P2P !== 'undefined' && P2P.broadcast) {
-      P2P.broadcast({
+    if (_isHost && typeof P2P !== 'undefined' && P2P.send) {
+      P2P.send({
         type: 'inu_draw_stage_change',
         stageIdx: idx
       });
@@ -1212,71 +1397,83 @@ const InuDrawGame = (() => {
   }
 
   /**
-   * 14. P2P 네트워크 메시지 수신 핸들러
+   * 14. P2P 네트워크 메시지 수신 핸들러 (동시 시작 & 동시 채점 동기화)
    */
   function _handleMessage(data) {
-    if (!data) return;
+    if (!data || typeof data !== 'object') return;
 
-    if (data.type === 'inu_draw_stage_change') {
-      _currentStageIdx = data.stageIdx || 0;
+    if (data.type === 'inu_draw_init_sync') {
+      _hasHostSynced = true;
+      _currentStageIdx = data.stageIdx !== undefined ? data.stageIdx : 0;
+      _submissions = {};
+      _hasSubmitted = false;
+      _hasRevealed = false;
+      _undoStack = [];
+      _renderGameUI();
+      _startCountdown(() => _startTimer());
+
+    } else if (data.type === 'inu_draw_stage_change') {
+      _currentStageIdx = data.stageIdx !== undefined ? data.stageIdx : 0;
       _customImgSrc = null;
       _hasSubmitted = false;
+      _hasRevealed = false;
+      _canDraw = false;
       _undoStack = [];
-      _timerSeconds = DEFAULT_TIMER_SEC;
+      _submissions = {};
+      _timeRemaining = TOTAL_DRAW_TIME;
       _renderGameUI();
-      _startTimer();
+      _startCountdown(() => _startTimer());
 
     } else if (data.type === 'inu_draw_submit') {
       _submissions[data.playerId] = {
+        id: data.playerId,
         name: data.playerName,
         score: data.score,
         matchRate: data.matchRate,
         meanDist: data.meanDist,
         timeSec: data.timeSec,
-        dataUrl: data.dataUrl
+        dataUrl: data.dataUrl,
+        penaltyReason: data.penaltyReason
       };
-      _updateMultiplayerStatus();
 
-      // 전체 인원 제출 완료 시 종료 보고 콜백
-      if (Object.keys(_submissions).length >= _players.length) {
-        const sorted = Object.entries(_submissions).sort((a, b) => b[1].score - a[1].score);
-        if (_onResult) {
-          _onResult({
-            winnerId: sorted[0][0],
-            winnerName: sorted[0][1].name,
-            score: sorted[0][1].score
-          });
+      // 제출 카운트 배지 갱신
+      const badgeCountEl = document.getElementById('inu-draw-players-count');
+      if (badgeCountEl) {
+        badgeCountEl.textContent = `제출: ${Object.keys(_submissions).length} / ${_players.length}명`;
+      }
+      const waitCountEl = document.getElementById('inu-waiting-count-text');
+      if (waitCountEl) {
+        waitCountEl.textContent = `${Object.keys(_submissions).length} / ${_players.length}명 제출 완료`;
+      }
+
+      // 호스트인 경우: 전원 제출 완료 시 채점 동시 공개 트리거!
+      if (_isHost && !_hasRevealed) {
+        const submittedCount = Object.keys(_submissions).length;
+        if (submittedCount >= _players.length) {
+          setTimeout(() => {
+            _revealScoresForAll();
+          }, 600);
         }
       }
+
+    } else if (data.type === 'inu_draw_reveal') {
+      // 호스트가 보낸 최종 채점 결과 수신 -> 전 참가자 동시 결과 모달 오픈!
+      if (data.submissions) {
+        _submissions = data.submissions;
+      }
+      _revealScoresForAll();
     }
   }
 
   /**
-   * 15. 멀티플레이어 제출 상태 칩 갱신
-   */
-  function _updateMultiplayerStatus() {
-    _players.forEach(p => {
-      const statusEl = document.getElementById(`chip-status-${p.id}`);
-      const chip = document.getElementById(`chip-draw-player-${p.id}`);
-      if (statusEl && chip) {
-        if (_submissions[p.id]) {
-          statusEl.textContent = `제출 완료 (${_submissions[p.id].score}점)`;
-          statusEl.style.color = '#10b981';
-          chip.classList.add('has-submitted');
-        } else {
-          statusEl.textContent = '그리는 중...';
-        }
-      }
-    });
-  }
-
-  /**
-   * 16. 게임 종료 및 리소스 해제
+   * 15. 게임 종료 및 리소스 해제
    */
   function destroy() {
     _stopTimer();
     _stopCountdown();
-    P2P.offMessage(_handleMessage);
+    if (typeof P2P !== 'undefined' && P2P.offMessage) {
+      P2P.offMessage(_handleMessage);
+    }
     if (_container) _container.innerHTML = '';
   }
 
